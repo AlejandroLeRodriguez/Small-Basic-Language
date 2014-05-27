@@ -1,0 +1,1464 @@
+'Pokémon
+
+GraphicsWindow.Title = "Pokémon"
+GraphicsWindow.Width = 900
+GraphicsWindow.Height = 900
+GraphicsWindow.Top = 5
+GraphicsWindow.Left = 100
+GraphicsWindow.CanResize = "false"
+background = ImageList.LoadImage(Program.Directory + "\title screen.png")
+GraphicsWindow.DrawResizedImage(background, 0, 0, 950, 950)
+
+GraphicsWindow.FontSize = 50
+
+GraphicsWindow.BrushColor = "white"
+GraphicsWindow.FontName = "Futura-CondensedMedium"
+GraphicsWindow.DrawBoundText(400, 500, 900, "Press Enter")
+
+Sound.Play(Program.Directory + "\title screen music.mp3")
+
+Program.Delay(1000)
+
+'VARIABLES
+'=========================================================
+
+beginingLittleRootTown = "true"
+beginingNewHome = "true"
+beginingNewRoom = "true"
+
+For i = 0 to 69
+  items[i] = 0
+endfor
+
+For i = 0 to 11
+  pokebal[i] = 0
+endfor
+
+'Check to see if the player is veiwing the item list
+itemVeiw = "false"
+
+'Check if the potion is the computer is claimed
+compPotionClaimed = "false"
+
+'Var stage: tells progam what back ground to render
+stage = "little root town"
+
+'var x: player x
+x = 450
+'var y: player y
+y = 450
+
+char_speed = 8
+
+'========================================================
+While GraphicsWindow.LastKey <> "Return"
+endwhile
+
+fadeOut()
+
+  gameEnviroment()
+  profSetup()
+  
+  GraphicsWindow.KeyDown = changeDirection
+  GraphicsWindow.KeyUp = stand
+
+While "true"
+  mx = GraphicsWindow.MouseX
+  my = GraphicsWindow.MouseY
+  
+  collision()
+  
+  If GraphicsWindow.LastKey = "Q" Then
+    Program.End()
+  EndIf
+  If GraphicsWindow.LastKey = "P" Then
+    TextWindow.WriteLine(mx  + ", " + my)
+    GraphicsWindow.Show()
+    
+  EndIf
+  If GraphicsWindow.LastKey = "S" Then
+    TextWindow.WriteLine(stage)
+    GraphicsWindow.Show()
+  EndIf
+  
+  'Display all the items
+  If key = "I" And itemVeiw = "false" Then
+    displayItems()
+    itemVeiw = "true"
+  EndIf
+  
+  If key = "Esc" Then
+    itemVeiw = "false"
+    TextWindow.Clear()
+    TextWindow.Hide()
+  EndIf
+  
+endwhile
+  
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+' ====================================================================================================
+' ====================================================================================================
+' ====================== S U B R O U T I N E S =================S U B R O U T I N E S===============================
+' ====================================================================================================
+' ====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+
+
+'Render background
+Sub gameEnviroment
+  barrier = "false"
+  
+  If stage = "little root town" Then
+    
+    GraphicsWindow.Clear()
+    
+    Sound.Stop(Program.Directory + "\title screen music.mp3")
+    Sound.Play(Program.Directory + "\pokemon little root town music.mp3")
+    
+    GraphicsWindow.Title = "Pokémon"
+    GraphicsWindow.Width = 900
+    GraphicsWindow.Height = 900
+    GraphicsWindow.Top = 5
+    GraphicsWindow.Left = 100
+    GraphicsWindow.CanResize = "false"
+    background = ImageList.LoadImage(Program.Directory + "\background_grass.png")
+    GraphicsWindow.DrawResizedImage(background, 0, 0, 950, 950)
+    direction = "up"
+    
+    'Houses
+    
+    Sound.Play(Program.Directory + "\pokemon little root town music.mp3")
+    newHouse = Shapes.AddImage(Program.Directory + "\Home_1.png")
+    mayHouse = Shapes.AddImage(Program.Directory + "\Home_2.png")
+    profBirtchLab = Shapes.AddImage(Program.Directory + "\Home_3.png")
+    
+    Shapes.Move(newHouse, 200, 200)
+    Shapes.Move(mayHouse, 500, 200)
+    Shapes.Move(profBirtchLab, 200, 550)
+    
+    'Trees right
+    tx = 839
+    ty = 0
+    For i = 0 To 14
+      GraphicsWindow.DrawImage(Program.Directory + "\tree.png", tx, ty)
+      ty = ty + 61
+    EndFor
+    
+    'trees left
+    tx = 0
+    ty = 0
+    For k = 0 To 14
+      GraphicsWindow.DrawImage(Program.Directory + "\tree.png", tx, ty)
+      ty = ty + 61
+    EndFor
+    
+    'trees bottom
+    tx = 78
+    ty = 854
+    For l = 0 To 9
+      GraphicsWindow.DrawImage(Program.Directory + "\tree.png", tx, ty)
+      tx = tx + 78
+    EndFor
+    
+    'trees top
+    tx = 78
+    ty = 0
+    For j = 0 To 1
+      For z = 0 To 3
+        GraphicsWindow.DrawImage(Program.Directory + "\tree.png", tx, ty)
+        tx = tx + 78
+      EndFor
+      tx = 546
+    EndFor
+    
+    playerSetup()
+    
+    changeDirection()
+    
+    
+    'text
+    
+    If beginingLittleRootTown = "true" Then
+      GraphicsWindow.BrushColor = "black"
+      GraphicsWindow.FontSize = 50
+      
+      Shapes.ShowShape(textBox)
+      words = Shapes.AddText("Mom: Ash, come and see our new home.")
+      Shapes.Move(words, 30, 744)
+      speechDelay()
+      Shapes.HideShape(words)
+      Shapes.HideShape(textBox)
+      
+      beginingLittleRootTown = "false"
+    EndIf
+    
+  EndIf
+  
+  
+  
+  If stage = "route 101" Then
+    GraphicsWindow.Clear()
+    
+    Shapes.HideShape(newHouse)
+    Shapes.HideShape(mayHouse)
+    Shapes.HideShape(profBirtchLab)
+    
+    background = ImageList.LoadImage(Program.Directory + "/route 101.png")
+    
+    GraphicsWindow.DrawResizedImage(background, 0, 0, 950, 950)
+    
+    
+    char_speed = 12
+    
+    direction = "up"
+    
+    playerSetup()
+    
+    For i = 0 To 11
+      Shapes.Zoom(Sprite[i], 1.3, 1.3)
+    EndFor
+    
+    changeDirection()
+  EndIf
+  
+  
+  
+  If stage = "new house" Then
+    fadeOut()
+    
+    GraphicsWindow.Clear()
+    
+    fadeIn()
+    
+    char_speed = 12
+    
+    barrier = "false"
+    
+    background = ImageList.LoadImage(Program.Directory + "\new house interior.png")
+    GraphicsWindow.DrawResizedImage(background, 0, 0, 950, 950)
+    
+    
+    Shapes.Remove(newHouse)
+    Shapes.Remove(mayHouse)
+    Shapes.Remove(profBirtchLab)
+    
+    direction = "up"
+    
+    playerSetup()
+    
+    For i = 0 To 11
+      Shapes.Zoom(Sprite[i], 2, 2)
+    EndFor
+    
+    changeDirection()
+    
+    'text
+    If beginingNewHome = "true" Then
+      Shapes.ShowShape(textBox)
+      words = Shapes.AddText("Mom: Go up to your room and take a look.")
+      Shapes.Move(words, 30, 744)
+      Shapes.ShowShape(words)
+      
+      speechDelay()
+      
+      Shapes.SetText(words, "Mom: Don't disturb the workers")
+      
+      speechDelay()
+      
+      Shapes.HideShape(textBox)
+      Shapes.HideShape(words)
+      beginingNewHome = "false"
+    EndIf
+  EndIf
+  
+  If stage = "new room" Then
+    fadeOut()
+    
+    GraphicsWindow.Clear()
+    
+    fadeIn()
+    
+    GraphicsWindow.Width = 900
+    GraphicsWindow.Height = 900
+    
+    background = ImageList.LoadImage(Program.Directory + "\new room.png")
+    GraphicsWindow.DrawResizedImage(background, 0, 0, 950, 950)
+    
+    
+    
+    direction = "down"
+    
+    playerSetup()
+    
+    For i = 0 To 11
+      Shapes.Zoom(Sprite[i], 2, 2)
+    EndFor
+    
+    changeDirection()
+    
+    'text
+    GraphicsWindow.FontSize = 50
+    
+    If beginingNewRoom = "true" Then
+      Shapes.ShowShape(textBox)
+      words = Shapes.AddText("Click around at different things.")
+      Shapes.Move(words, 30, 744)
+      Shapes.ShowShape(words)
+      
+      speechDelay()
+      
+      Shapes.SetText(words, "They may have stuff you can do")
+      
+      speechDelay()
+      
+      Shapes.HideShape(textBox)
+      Shapes.HideShape(words)
+      beginingNewRoom = "false"
+    EndIf
+  EndIf
+    
+    
+    
+    If stage = "clock" Then
+      fadeOut()
+      
+      GraphicsWindow.Clear()
+      
+      fadeIn()
+      
+      GraphicsWindow.BrushColor = "darkRed"
+      GraphicsWindow.FillRectangle(50, 50, 380, 100)
+      GraphicsWindow.FontSize = 50
+      GraphicsWindow.BrushColor = "white"
+      GraphicsWindow.DrawBoundText(60, 60, 400, "Back to room")
+      
+      '*****************************************************************
+      'This clock was taken from the small basic website
+      'http://smallbasic.com/smallbasic.com/program/?VKC687
+      '*****************************************************************
+      InitWindow()
+    EndIf
+
+
+
+EndSub
+
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+
+
+Sub changeDirection
+  key = GraphicsWindow.LastKey
+  
+  If key = "Up" Then
+    direction = "up"
+    If barrier = "false" Then
+    EndIf
+    
+  ElseIf key = "Down" then
+    direction = "down"
+    If barrier = "false" Then
+    EndIf
+    
+  ElseIf key = "Left" then
+    direction = "left"
+    If barrier = "false" Then
+    EndIf
+    
+  ElseIf key = "Right" then
+    direction = "right"
+    If barrier = "false" Then
+    EndIf
+  EndIf
+  
+  If barrier = "false" Then
+    characterMove()
+  EndIf
+EndSub
+
+Sub characterMove
+  If direction = "up" Then
+      
+      Shapes.HideShape(Sprite[0])    
+      Shapes.HideShape(Sprite[3])
+      Shapes.HideShape(Sprite[4])
+      Shapes.HideShape(Sprite[5])
+      Shapes.HideShape(Sprite[6])
+      Shapes.HideShape(Sprite[7])
+      Shapes.HideShape(Sprite[8])
+      Shapes.HideShape(Sprite[9])
+      Shapes.HideShape(Sprite[10])
+      Shapes.HideShape(Sprite[11])
+      
+      For j = 0 To 2
+        Shapes.HideShape(Sprite[1])
+        Shapes.ShowShape(Sprite[2])
+      EndFor
+      
+      y = y - char_speed
+
+      Shapes.Move(Sprite[0], x, y)
+      Shapes.Move(Sprite[1], x, y)
+      Shapes.Move(Sprite[2], x, y)
+      Shapes.Move(Sprite[3], x, y)
+      Shapes.Move(Sprite[4], x, y)
+      Shapes.Move(Sprite[5], x, y)
+      Shapes.Move(Sprite[6], x, y)
+      Shapes.Move(Sprite[7], x, y)
+      Shapes.Move(Sprite[8], x, y)
+      Shapes.Move(Sprite[9], x, y)
+      Shapes.Move(Sprite[10], x, y)
+      Shapes.Move(Sprite[11], x, y)
+      
+      frameRate()
+      
+      For j = 0 To 2
+        Shapes.HideShape(Sprite[2])
+        Shapes.ShowShape(Sprite[1])
+      EndFor
+      
+      y = y - char_speed
+      
+      Shapes.Move(Sprite[0], x, y)
+      Shapes.Move(Sprite[1], x, y)
+      Shapes.Move(Sprite[2], x, y)
+      Shapes.Move(Sprite[3], x, y)
+      Shapes.Move(Sprite[4], x, y)
+      Shapes.Move(Sprite[5], x, y)
+      Shapes.Move(Sprite[6], x, y)
+      Shapes.Move(Sprite[7], x, y)
+      Shapes.Move(Sprite[8], x, y)
+      Shapes.Move(Sprite[9], x, y)
+      Shapes.Move(Sprite[10], x, y)
+      Shapes.Move(Sprite[11], x, y)
+      frameRate()
+    EndIf
+    
+    If direction = "down" Then
+      y = y + char_speed
+      Shapes.HideShape(Sprite[0])
+      Shapes.HideShape(Sprite[1])
+      Shapes.HideShape(Sprite[2])
+      Shapes.HideShape(Sprite[3])
+      Shapes.HideShape(Sprite[6])
+      Shapes.HideShape(Sprite[7])
+      Shapes.HideShape(Sprite[8])
+      Shapes.HideShape(Sprite[9])
+      Shapes.HideShape(Sprite[10])
+      Shapes.HideShape(Sprite[11])
+      
+      For j = 0 To 1
+        Shapes.ShowShape(Sprite[4])
+        Shapes.HideShape(Sprite[5])
+      EndFor
+      
+      Shapes.Move(Sprite[0], x, y)
+      Shapes.Move(Sprite[1], x, y)
+      Shapes.Move(Sprite[2], x, y)
+      Shapes.Move(Sprite[3], x, y)
+      Shapes.Move(Sprite[4], x, y)
+      Shapes.Move(Sprite[5], x, y)
+      Shapes.Move(Sprite[6], x, y)
+      Shapes.Move(Sprite[7], x, y)
+      Shapes.Move(Sprite[8], x, y)
+      Shapes.Move(Sprite[9], x, y)
+      Shapes.Move(Sprite[10], x, y)
+      Shapes.Move(Sprite[11], x, y)
+      
+      frameRate()
+      
+      y = y + char_speed
+      For j = 0 To 1
+        Shapes.ShowShape(Sprite[5])
+        Shapes.HideShape(Sprite[4])
+      EndFor
+      
+      Shapes.Move(Sprite[0], x, y)
+      Shapes.Move(Sprite[1], x, y)
+      Shapes.Move(Sprite[2], x, y)
+      Shapes.Move(Sprite[3], x, y)
+      Shapes.Move(Sprite[4], x, y)
+      Shapes.Move(Sprite[5], x, y)
+      Shapes.Move(Sprite[6], x, y)
+      Shapes.Move(Sprite[7], x, y)
+      Shapes.Move(Sprite[8], x, y)
+      Shapes.Move(Sprite[9], x, y)
+      Shapes.Move(Sprite[10], x, y)
+      Shapes.Move(Sprite[11], x, y)
+      
+      frameRate()
+    EndIf
+    
+    If direction = "left" Then
+      x = x - char_speed
+      Shapes.HideShape(Sprite[0])
+      Shapes.HideShape(Sprite[1])
+      Shapes.HideShape(Sprite[2])
+      Shapes.HideShape(Sprite[3])
+      Shapes.HideShape(Sprite[6])
+      Shapes.HideShape(Sprite[5])
+      Shapes.HideShape(Sprite[4])
+      Shapes.HideShape(Sprite[9])
+      Shapes.HideShape(Sprite[10])
+      Shapes.HideShape(Sprite[11])
+      
+      For j = 0 To 1
+        Shapes.ShowShape(Sprite[7])
+        Shapes.HideShape(Sprite[8])
+      EndFor
+      
+      Shapes.Move(Sprite[0], x, y)
+      Shapes.Move(Sprite[1], x, y)
+      Shapes.Move(Sprite[2], x, y)
+      Shapes.Move(Sprite[3], x, y)
+      Shapes.Move(Sprite[4], x, y)
+      Shapes.Move(Sprite[5], x, y)
+      Shapes.Move(Sprite[6], x, y)
+      Shapes.Move(Sprite[7], x, y)
+      Shapes.Move(Sprite[8], x, y)
+      Shapes.Move(Sprite[9], x, y)
+      Shapes.Move(Sprite[10], x, y)
+      Shapes.Move(Sprite[11], x, y)
+      
+      frameRate()
+      
+      x = x - char_speed
+      For j = 0 To 1
+        Shapes.ShowShape(Sprite[8])
+        Shapes.HideShape(Sprite[7])
+      EndFor
+      
+      Shapes.Move(Sprite[0], x, y)
+      Shapes.Move(Sprite[1], x, y)
+      Shapes.Move(Sprite[2], x, y)
+      Shapes.Move(Sprite[3], x, y)
+      Shapes.Move(Sprite[4], x, y)
+      Shapes.Move(Sprite[5], x, y)
+      Shapes.Move(Sprite[6], x, y)
+      Shapes.Move(Sprite[7], x, y)
+      Shapes.Move(Sprite[8], x, y)
+      Shapes.Move(Sprite[9], x, y)
+      Shapes.Move(Sprite[10], x, y)
+      Shapes.Move(Sprite[11], x, y)
+      
+      frameRate()
+    EndIf
+    
+    If direction = "right" Then
+      x = x + char_speed
+      Shapes.HideShape(Sprite[0])
+      Shapes.HideShape(Sprite[1])
+      Shapes.HideShape(Sprite[2])
+      Shapes.HideShape(Sprite[3])
+      Shapes.HideShape(Sprite[6])
+      Shapes.HideShape(Sprite[7])
+      Shapes.HideShape(Sprite[8])
+      Shapes.HideShape(Sprite[9])
+      Shapes.HideShape(Sprite[5])
+      Shapes.HideShape(Sprite[4])
+      
+      For j = 0 To 1
+        Shapes.ShowShape(Sprite[10])
+        Shapes.HideShape(Sprite[11])
+      EndFor
+      
+      Shapes.Move(Sprite[0], x, y)
+      Shapes.Move(Sprite[1], x, y)
+      Shapes.Move(Sprite[2], x, y)
+      Shapes.Move(Sprite[3], x, y)
+      Shapes.Move(Sprite[4], x, y)
+      Shapes.Move(Sprite[5], x, y)
+      Shapes.Move(Sprite[6], x, y)
+      Shapes.Move(Sprite[7], x, y)
+      Shapes.Move(Sprite[8], x, y)
+      Shapes.Move(Sprite[9], x, y)
+      Shapes.Move(Sprite[10], x, y)
+      Shapes.Move(Sprite[11], x, y)
+      
+      frameRate()
+      
+      x = x + char_speed
+      For j = 0 To 1
+        Shapes.ShowShape(Sprite[11])
+        Shapes.HideShape(Sprite[10])
+      EndFor
+      
+      Shapes.Move(Sprite[0], x, y)
+      Shapes.Move(Sprite[1], x, y)
+      Shapes.Move(Sprite[2], x, y)
+      Shapes.Move(Sprite[3], x, y)
+      Shapes.Move(Sprite[4], x, y)
+      Shapes.Move(Sprite[5], x, y)
+      Shapes.Move(Sprite[6], x, y)
+      Shapes.Move(Sprite[7], x, y)
+      Shapes.Move(Sprite[8], x, y)
+      Shapes.Move(Sprite[9], x, y)
+      Shapes.Move(Sprite[10], x, y)
+      Shapes.Move(Sprite[11], x, y)
+      
+      frameRate()
+  EndIf
+EndSub
+
+Sub stand
+  If direction = "up" Then
+    Shapes.ShowShape(Sprite[0])
+    Shapes.HideShape(Sprite[1])
+    Shapes.HideShape(Sprite[2])
+    Shapes.HideShape(Sprite[3])
+    Shapes.HideShape(Sprite[4])
+    Shapes.HideShape(Sprite[5])
+    Shapes.HideShape(Sprite[6])
+    Shapes.HideShape(Sprite[7])
+    Shapes.HideShape(Sprite[8])
+    Shapes.HideShape(Sprite[9])
+    Shapes.HideShape(Sprite[10])
+    Shapes.HideShape(Sprite[11])
+  EndIf
+  
+  If direction = "down" Then
+    Shapes.HideShape(Sprite[0])
+    Shapes.HideShape(Sprite[1])
+    Shapes.HideShape(Sprite[2])
+    Shapes.ShowShape(Sprite[3])
+    Shapes.HideShape(Sprite[4])
+    Shapes.HideShape(Sprite[5])
+    Shapes.HideShape(Sprite[6])
+    Shapes.HideShape(Sprite[7])
+    Shapes.HideShape(Sprite[8])
+    Shapes.HideShape(Sprite[9])
+    Shapes.HideShape(Sprite[10])
+    Shapes.HideShape(Sprite[11])
+  EndIf
+  
+  If direction = "left" Then
+    Shapes.HideShape(Sprite[0])
+    Shapes.HideShape(Sprite[1])
+    Shapes.HideShape(Sprite[2])
+    Shapes.HideShape(Sprite[3])
+    Shapes.HideShape(Sprite[4])
+    Shapes.HideShape(Sprite[5])
+    Shapes.ShowShape(Sprite[6])
+    Shapes.HideShape(Sprite[7])
+    Shapes.HideShape(Sprite[8])
+    Shapes.HideShape(Sprite[9])
+    Shapes.HideShape(Sprite[10])
+    Shapes.HideShape(Sprite[11])
+  EndIf
+  
+  If direction = "right" Then
+    Shapes.HideShape(Sprite[0])
+    Shapes.HideShape(Sprite[1])
+    Shapes.HideShape(Sprite[2])
+    Shapes.HideShape(Sprite[3])
+    Shapes.HideShape(Sprite[4])
+    Shapes.HideShape(Sprite[5])
+    Shapes.HideShape(Sprite[6])
+    Shapes.HideShape(Sprite[7])
+    Shapes.HideShape(Sprite[8])
+    Shapes.ShowShape(Sprite[9])
+    Shapes.HideShape(Sprite[10])
+    Shapes.HideShape(Sprite[11])
+  EndIf
+EndSub
+
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+
+
+Sub playerSetup
+  
+  'BACK IMGS
+  '0-2: back
+  backStand = ImageList.LoadImage(Program.Directory + "\standing_back.png")
+  backRight = ImageList.LoadImage(Program.Directory + "\walking_back_right.png")
+  backLeft = ImageList.LoadImage(Program.Directory + "\walking_back_left.png")
+  
+  Sprite[0] = Shapes.AddImage(backStand)
+  Sprite[1] = Shapes.AddImage(backRight)
+  Sprite[2] = Shapes.AddImage(backLeft)
+   
+  Shapes.Move(Sprite[0], 450, 450)
+  Shapes.Move(Sprite[1], 450, 450)
+  Shapes.Move(Sprite[2], 450, 450)
+  
+  'DOWN IMGS
+  '3-5: down
+  downStand = ImageList.LoadImage(Program.Directory + "\standing_down.png")
+  downRight = ImageList.LoadImage(Program.Directory + "\walking_down_right.png")
+  downLeft = ImageList.LoadImage(Program.Directory + "\walking_down_left.png")
+  
+  Sprite[3] = Shapes.AddImage(downStand)
+  Sprite[4] = Shapes.AddImage(downRight)
+  Sprite[5] = Shapes.AddImage(downLeft)
+   
+  Shapes.Move(Sprite[3], 450, 450)
+  Shapes.Move(Sprite[4], 450, 450)
+  Shapes.Move(Sprite[5], 450, 450)
+  
+  'LEFT IMGS
+  '6-8: left
+  leftStand = ImageList.LoadImage(Program.Directory + "\standing_left.png")
+  leftRight = ImageList.LoadImage(Program.Directory + "\walking_left_right.png")
+  leftLeft = ImageList.LoadImage(Program.Directory + "\walking_left_left.png")
+  
+  Sprite[6] = Shapes.AddImage(leftStand)
+  Sprite[7] = Shapes.AddImage(leftRight)
+  Sprite[8] = Shapes.AddImage(leftLeft)
+   
+  Shapes.Move(Sprite[6], 450, 450)
+  Shapes.Move(Sprite[7], 450, 450)
+  Shapes.Move(Sprite[8], 450, 450)
+  
+  'RIGHT IMGS
+  '9-11: right
+  rightStand = ImageList.LoadImage(Program.Directory + "\standing_right.png")
+  rightRight = ImageList.LoadImage(Program.Directory + "\walking_right_right.png")
+  rightLeft = ImageList.LoadImage(Program.Directory + "\walking_right_left.png")
+  
+  Sprite[9] = Shapes.AddImage(rightStand)
+  Sprite[10] = Shapes.AddImage(rightRight)
+  Sprite[11] = Shapes.AddImage(rightLeft)
+   
+  Shapes.Move(Sprite[9], 450, 450)
+  Shapes.Move(Sprite[10], 450, 450)
+  Shapes.Move(Sprite[11], 450, 450)
+  
+  
+  'text box
+  textBox = Shapes.AddImage(Program.Directory + "\text box.png")
+  Shapes.Move(textBox, 10, 714)
+  Shapes.HideShape(textBox)
+EndSub
+
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+
+Sub profSetup
+  'ProfSprite[0 - 3] are the standing images for prof birch
+  profSprite[0] = Shapes.AddImage(Program.Directory + "\ProfBirch_up_standing.png")
+  profSprite[1] = Shapes.AddImage(Program.Directory + "\ProfBirch_down_standing.png")
+  profSprite[2] = Shapes.AddImage(Program.Directory + "\ProfBirch_left_standing.png")
+  profSprite[3] = Shapes.AddImage(Program.Directory + "\ProfBirch_right_standing.png")
+  
+  'ProfSprite[4 - 7] are the right foot images for prof birch
+  profSprite[4] = Shapes.AddImage(Program.Directory + "\ProfBirch_up_right.png")
+  profSprite[5] = Shapes.AddImage(Program.Directory + "\ProfBirch_down_right.png")
+  profSprite[6] = Shapes.AddImage(Program.Directory + "\ProfBirch_left_right.png")
+  profSprite[7] = Shapes.AddImage(Program.Directory + "\ProfBirch_right_right.png")
+  
+  'ProfSprite[8 - 11] are the left foot images for prof birch
+  profSprite[8] = Shapes.AddImage(Program.Directory + "\ProfBirch_up_left.png")
+  profSprite[9] = Shapes.AddImage(Program.Directory + "\ProfBirch_down_left.png")
+  profSprite[10] = Shapes.AddImage(Program.Directory + "\ProfBirch_right_left.png")
+  profSprite[11] = Shapes.AddImage(Program.Directory + "\ProfBirch_left_left.png")
+  
+  
+  
+  
+  'hide ProfSprite[0 - 3] 
+  Shapes.HideShape(profSprite[0])
+  Shapes.HideShape(profSprite[1])
+  Shapes.HideShape(profSprite[2])
+  Shapes.HideShape(profSprite[3])
+  
+  'hide ProfSprite[4 - 7]
+  Shapes.HideShape(profSprite[4])
+  Shapes.HideShape(profSprite[5])
+  Shapes.HideShape(profSprite[6])
+  Shapes.HideShape(profSprite[7])
+  
+  'hide ProfSprite[8 - 11] 
+  Shapes.HideShape(profSprite[8])
+  Shapes.HideShape(profSprite[9])
+  Shapes.HideShape(profSprite[10])
+  Shapes.HideShape(profSprite[11])
+EndSub
+
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+
+
+Sub frameRate
+  Program.Delay(100)
+EndSub
+
+Sub speechDelay
+  Program.Delay(2500)
+EndSub
+
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+
+
+Sub collision
+  If stage = "little root town" Then
+    
+    
+    'left tree border
+    If x < 75 Then
+      x = 75
+      
+    'right tree border
+    ElseIf x > 805 then
+      x = 805
+      
+    'bottom tree border
+    elseif y > 800 then
+      y = 800
+      
+    'top tree border
+    elseif y < 61 and x < 350 or y < 61 and x > 500 then
+        y = 61
+  EndIf
+      
+      
+      
+      
+      
+  '==============================================================================      
+  'HOUSE BARRIERS
+  '==============================================================================
+
+    'enter new house
+    If x > 315 And x < 355 And y > 330 And y < 360 Then
+      stage = "new house"
+      barrier = "false"
+      
+      'var x: player x
+      x = 690
+      'var y: player y
+      y = 810
+      
+      enterDoor()
+      
+      gameEnviroment()
+    EndIf
+    
+    'route 101
+    If y < 0 And direction = "up" Then
+      stage = "route 101"
+      barrier = "false"
+      
+      'var y: player y
+      y = 850
+      'var x: player x
+      x = 500
+      
+      gameEnviroment()
+    EndIf
+
+    'house 1
+    If y > 340 And y < 365 And x > 170 And x < 394 Then
+      If direction = "up" Then
+        barrier = "true"
+        stand()
+      Else
+        barrier = "false"
+      EndIf
+    EndIf
+    
+    If y > 145 And y < 200 And x > 170 And x < 394 Then
+      If direction = "down" Then
+        barrier = "true"
+        stand()
+      Else
+        barrier = "false"
+      EndIf
+    EndIf
+    
+    If y > 160 And y < 375 And x > 162 And x < 180 Then
+      If direction = "right" Then
+        barrier = "true"
+        stand()
+      Else
+        barrier = "false"
+      EndIf
+    EndIf
+    
+    If y > 160 And y < 375 And x > 360 And x < 394 Then
+      If direction = "left" Then
+        barrier = "true"
+        stand()
+      Else
+        barrier = "false"
+      EndIf
+    EndIf
+    
+    
+    
+    'house 2
+    If y > 340 And y < 365 And x > 576 And x < 694 Then
+      If direction = "up" Then
+        barrier = "true"
+        stand()
+      Else
+        barrier = "false"
+      EndIf
+    EndIf
+    
+    If y > 145 And y < 200 And x > 470 And x < 694 Then
+      If direction = "down" Then
+        barrier = "true"
+        stand()
+      Else
+        barrier = "false"
+      EndIf
+    EndIf
+    
+    If y > 160 And y < 375 And x > 462 And x < 480 Then
+      If direction = "right" Then
+        barrier = "true"
+        stand()
+      Else
+        barrier = "false"
+      EndIf
+    EndIf
+    
+    If y > 160 And y < 375 And x > 660 And x < 694 Then
+      If direction = "left" Then
+        barrier = "true"
+        stand()
+      Else
+        barrier = "false"
+      EndIf
+    EndIf
+    
+    
+    
+    'house 3
+    If y > 690 And y < 715 And x > 170 And x < 394 Then
+      If direction = "up" Then
+        barrier = "true"
+        stand()
+      Else
+        barrier = "false"
+      EndIf
+    EndIf
+    
+    If y > 495 And y < 550 And x > 170 And x < 394 Then
+      If direction = "down" Then
+        barrier = "true"
+        stand()
+      Else
+        barrier = "false"
+      EndIf
+    EndIf
+    
+    If y > 510 And y < 725 And x > 162 And x < 180 Then
+      If direction = "right" Then
+        barrier = "true"
+        stand()
+      Else
+        barrier = "false"
+      EndIf
+    EndIf
+    
+    If y > 510 And y < 725 And x > 360 And x < 394 Then
+      If direction = "left" Then
+        barrier = "true"
+        stand()
+      Else
+        barrier = "false"
+      EndIf
+    EndIf
+    
+  EndIf
+  
+  
+  
+  If stage = "route 101" Then
+    If y > 850 And direction = "down" Then
+      stage = "little root town"
+      barrier = "false"
+      
+      'var y: player y
+      y = 50
+      
+      gameEnviroment()
+    EndIf
+    
+    'Left and right walls
+    If x > 835 Then
+      x = 835
+    EndIf
+    If x < 0 Then
+      x = 0
+    EndIf
+    
+    'Bottom left tree section
+    If y > 791 And x < 472 Then
+      y = 791
+    EndIf
+    If y > 693 And x < 99 And direction = "left" Then
+      x = 99
+    EndIf
+    
+    'Bottom right tree section
+    If x > 524 And x < 664 And y > 595 And direction  = "right" Then
+      x = 524
+    EndIf
+    
+    If y > 597 And x > 568 And x < 647 And direction = "down" Then
+      y = 597
+    EndIf
+      
+    If x < 664 And x > 524 And y > 595 And direction  = "left" Then
+      x = 664
+    EndIf
+    
+    If y > 683 And x > 664 And x < 855 And direction  = "down" Then
+      y = 683
+    EndIf
+    
+    If x > 855 And y > 597 And direction = "down" Then
+      y = 597
+    EndIf
+    
+    'Dirt walls
+    If y < 645 And y > 580 And x > 369   And x < 524 And direction = "up" Then
+      y = 640
+    EndIf
+    
+    If y < 310 And y > 280 And x > 320 And x < 520 And direction = "up" Then
+      y = 310
+    EndIf
+    If x < 332 And x > 300 And y < 310 And y > 379 And direction = "left" Then
+      x = 332
+    EndIf
+    If y < 357 And y > 305 And x > 99 And x < 332 And direction = "up" Then
+      y = 357
+    EndIf
+    
+    'Middle tree section
+    If x > 480 And x < 550 And y < 435 And y > 272 And direction = "right" Then
+      x = 480
+    EndIf
+    If y < 435 And y > 272 And x > 480 And x < 616 And direction = "up" Then
+      y = 435
+    EndIf
+    If y < 394 And y > 294 And x > 550 And x < 700 and direction = "up" Then
+      y = 394
+    EndIf
+    If x < 617 And x > 550 And y < 467 And y > 236 And direction = "left" Then
+      x = 617
+    EndIf
+    If y > 318 And y < 384 And x > 550 And x < 700 And direction = "down" Then
+      y = 318
+    EndIf
+    
+    'Middle left tree section
+    If x < 190 And y < 600 And y > 360 And direction = "left" Then
+      x = 190
+    EndIf
+    If x < 95 And y < 644 And y > 324 And direction = "left" Then
+      x = 95
+    EndIf
+    If y < 644 And y > 250 And x < 95 And direction = "up" Then
+      y = 644
+    EndIf
+    If y < 600 And y < 366 And x < 190 And direction = "up" Then
+      y = 600-0
+    EndIf
+    If y < 366 And y > 446 And x < 190 And direction = "down" Then
+      y = 366
+    EndIf
+    If y > 220 And y < 320 And x < 95 And direction = "down" Then
+      y = 220
+    EndIf
+    
+    'top left tree section
+    If y < 62 And x < 370 And direction = "up" Then
+      y = 62
+    EndIf
+    
+    
+  EndIf
+    
+  
+  
+  
+  If stage = "new house" Then
+    'Enter your new room
+    If y < 241 And direction = "up" Then
+      stage = "new room"
+      barrier = "false"
+      
+      'var x: player x
+      x = 738
+      'var y: player y
+      y = 290
+      
+      enterDoor()
+      
+      gameEnviroment()
+    EndIf
+    
+    'exit building
+    If y > 830 And direction = "down" Then
+      stage = "little root town"
+      barrier = "false"
+      
+      char_speed = 8
+      
+     'var x: player x
+      x = 316
+      'var y: player y
+      y = 419
+      
+      enterDoor()
+      
+      gameEnviroment()
+    EndIf
+    
+    If x < 550 And direction = "left" Then
+      x = 550
+    EndIf
+    
+    If x > 822 And direction = "right" Then
+      x = 822
+    
+    EndIf
+  EndIf
+  
+  If stage = "new room" Then
+    If y < 200 And x > 730 And direction = "up" Then
+      stage = "new house"
+      barrier = "false"
+      
+      'var x: player x
+      x = 682
+      'var y: player y
+      y = 287
+      
+      enterDoor()
+      
+      gameEnviroment()
+    EndIf
+    
+    'room walls
+    If x < 30 And direction = "left" Then
+      x = 30
+    EndIf
+    
+    If x > 827 And direction = "right" Then
+      x = 827
+    EndIf
+    
+    If y > 787 And direction = "down" Then
+      y = 787
+    EndIf
+    
+    
+    'FURNITURE
+    '=========================================================
+    
+    'bed
+    If x < 260 And y > 460 And y < 700 and direction = "left" Then
+      x = 260
+    EndIf
+    
+    If y > 600 And y < 647 And x < 260 and direction = "up" Then
+      y = 647
+    EndIf
+    
+    If y > 420 And y < 600 And x < 260 And direction = "down" Then
+      y = 420
+    EndIf
+    
+    'desk and stuff
+    If x < 730 And y < 245 And direction = "up" Then
+      y = 245
+    EndIf
+    
+    'clock
+    If Mouse.IsLeftButtonDown And mx > 548 And mx < 628 And my > 64 And my < 144 Then
+      stage = "clock"
+      
+      gameEnviroment()
+    EndIf 
+    
+    'Computer
+    If mx < 94 And my < 242 And Mouse.IsLeftButtonDown And compPotionClaimed = "false" Then
+      items[40] = items[40] + 1
+      compPotionClaimed = "true"
+      
+      Shapes.ShowShape(textBox)
+      words = Shapes.AddText("You have recieved a potion")
+      
+      Shapes.Move(words, 30, 744)
+      
+      speechDelay()
+      
+      Shapes.SetText(words, "Press I to view all your items")
+      
+      speechDelay()
+      
+      Shapes.HideShape(words)
+      Shapes.HideShape(textBox)
+    EndIf
+    
+    'Gaming Consol
+    If mx > 343 And my > 192 And mx < 416 And my < 282 and Mouse.IsLeftButtonDown Then 
+      Shapes.ShowShape(textBox)
+      words = Shapes.AddText("This is a Game Cube")
+      
+      Shapes.Move(words, 30, 744)
+      
+      speechDelay()
+      
+      Shapes.HideShape(words)
+      Shapes.HideShape(textBox)
+    EndIf
+    
+    EndIf
+  
+    If stage = "clock" Then
+      InitHands()
+      Sound.PlayClick()
+      Program.Delay(1000)
+    
+      If Mouse.IsLeftButtonDown And mx > 50 And my > 50 And mx < 430 And my < 150 Then
+          stage = "new room"
+          
+          gameEnviroment()
+      EndIf
+    EndIf
+    
+EndSub
+
+
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+
+
+'Transitional subroutines
+
+Sub fadeOut
+  GraphicsWindow.BrushColor = "black"
+  
+  fade_to_black = Shapes.AddRectangle(1000, 1000)
+  
+  f = 10
+  
+  For f = 0 To 100 Step 10
+    Shapes.SetOpacity(fade_to_black, f)
+    frameRate()
+  EndFor
+EndSub
+
+
+Sub fadeIn
+  
+  fade_to_black = Shapes.AddRectangle(1000, 1000)
+  
+  f = 100
+  
+  For f = 100 To 0 Step -10
+    Shapes.SetOpacity(fade_to_black, f)
+    frameRate()
+  EndFor
+  
+  Shapes.Remove(fade_to_black)
+EndSub
+
+
+Sub enterDoor
+  Sound.PlayAndWait(Program.Directory + "/door sound.mp3")
+EndSub
+
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+'=====================================================================================================
+
+
+
+
+
+Sub InitHands
+  If Clock.Hour  + Clock.Minute/60 + Clock.Second/3600 <> Hour Then
+    Shapes.Remove(HourHand)
+    Hour = Clock.Hour + Clock.Minute/60 + Clock.Second/3600
+    GraphicsWindow.PenColor = "Black"
+    GraphicsWindow.PenWidth = 3
+    HourHand = Shapes.AddLine(MidX,MidY,MidX+Radius/2*Math.Cos(Math.GetRadians(Hour*30-90)),MidY+Radius/2*Math.Sin(Math.GetRadians(Hour*30-90)))
+  EndIf
+  If Clock.Minute <> Minute Then
+    Shapes.Remove(MinuteHand)
+    Minute = Clock.Minute + Clock.Second/60
+    GraphicsWindow.PenColor = "Blue"
+    GraphicsWindow.PenWidth = 2
+    MinuteHand = Shapes.AddLine(MidX,MidY,MidX+Radius/1.2*Math.Cos(Math.GetRadians(Minute*6-90)),MidY+Radius/1.2*Math.Sin(Math.GetRadians(Minute*6-90)))
+  EndIf
+  If Clock.Second <> Second Then
+    Shapes.Remove(SecondHand)
+    Second = Clock.Second
+    GraphicsWindow.PenColor = "Red"
+    GraphicsWindow.PenWidth = 1
+    SecondHand = Shapes.AddLine(MidX,MidY,MidX+Radius*Math.Cos(Math.GetRadians(Second*6-90)),MidY+Radius*Math.Sin(Math.GetRadians(Second*6-90)))
+  EndIf
+EndSub
+
+
+
+Sub InitWindow
+  GraphicsWindow.BackgroundColor = "Black"
+  GW = GraphicsWindow.Width
+  GH = GraphicsWindow.Height
+  Radius = 200
+  MidX = GW/2
+  MidY = GH/2
+  GraphicsWindow.BrushColor = "BurlyWood"
+  GraphicsWindow.DrawEllipse(MidX-Radius-15,MidY-Radius-5,Radius*2+30,Radius*2+20)
+  GraphicsWindow.FillEllipse(MidX-Radius-15,MidY-Radius-5,Radius*2+30,Radius*2+20)
+  For Angle = 1 To 180
+    X = MidX+(Radius+15)*Math.Cos(Math.GetRadians(Angle))
+    Y1 = MidY+Radius*Math.Sin(Math.GetRadians(Angle))+15
+    Y2 = MidY+(Radius+15)*Math.Sin(Math.GetRadians(-Angle))+10
+    Blue = Math.GetRandomNumber(40)+30
+    GraphicsWindow.PenWidth = Math.GetRandomNumber(5)
+    GraphicsWindow.PenColor = GraphicsWindow.GetColorFromRGB(Blue+100+Math.GetRandomNumber(10),Blue+60+Math.GetRandomNumber(20),Blue)
+    Shapes.AddLine(X,Y1,X,Y2)
+  EndFor
+  GraphicsWindow.BrushColor = "White"
+  GraphicsWindow.FontSize = 20
+  For i = 1 To 12
+    Radians = Math.GetRadians(-i * 30 + 90)
+    ClockNum[i] = Shapes.AddText(i)
+    Shapes.Move(ClockNum[i],MidX-4+Radius*Math.Cos(Radians),MidY-4-Radius*Math.Sin(Radians))
+  EndFor
+EndSub
+
+
+
+
+
+
+
+Sub displayItems
+  TextWindow.WriteLine("Antidote: " + items[0])
+  TextWindow.WriteLine("Awakening: " + items[1])
+  TextWindow.WriteLine("Big Pearl: " + items[2])
+  TextWindow.WriteLine("Black Flute: " + items[3])
+  TextWindow.WriteLine("Blue Flute: " + items[4])
+  TextWindow.WriteLine("Blue Shard: " + items[5])
+  TextWindow.WriteLine("Burn Heal: " + items[6])
+  TextWindow.WriteLine("Calcium: " + items[7])
+  TextWindow.WriteLine("Carbos: " + items[8])
+  TextWindow.WriteLine("Dire Hit: " + items[9])
+  TextWindow.WriteLine("Elixir: " + items[10])
+  TextWindow.WriteLine("Energy Root: " + items[11])
+  TextWindow.WriteLine("Energy Powder: " + items[12])
+  TextWindow.WriteLine("Escape Rope: " + items[13])
+  TextWindow.WriteLine("Ether: " + items[14])
+  TextWindow.WriteLine("Fire Stone: " + items[15])
+  TextWindow.WriteLine("Fluffy Tail: " + items[16])
+  TextWindow.WriteLine("Fresh Water: " + items[17])
+  TextWindow.WriteLine("Full Heal: " + items[18])
+  TextWindow.WriteLine("Full Restore: " + items[19])
+  TextWindow.WriteLine("Green Shard: " + items[20])
+  TextWindow.WriteLine("Guard Spec: " + items[21])
+  TextWindow.WriteLine("Heal Powder: " + items[22])
+  TextWindow.WriteLine("Heart Scale: " + items[23])
+  TextWindow.WriteLine("HP Up: " + items[24])
+  TextWindow.WriteLine("Hyper Potion: " + items[25])
+  TextWindow.WriteLine("Ice Heal: " + items[26])
+  TextWindow.WriteLine("Iron: " + items[27])
+  TextWindow.WriteLine("Lava Cookie: " + items[28])
+  TextWindow.WriteLine("Leaf Stone: " + items[29])
+  TextWindow.WriteLine("Lemonade: " + items[30])
+  TextWindow.WriteLine("Max Elixer: " + items[31])
+  TextWindow.WriteLine("Max Ether: " + items[32])
+  TextWindow.WriteLine("Max Potion: " + items[33])
+  TextWindow.WriteLine("Max Repel: " + items[34])
+  TextWindow.WriteLine("Max Revive: " + items[35])
+  TextWindow.WriteLine("Moon Stone: " + items[36])
+  TextWindow.WriteLine("Nugget: " + items[37])
+  TextWindow.WriteLine("Paralyz Heal: " + items[38])
+  TextWindow.WriteLine("Pearl: " + items[39])
+  TextWindow.WriteLine("Potion: " + items[40])
+  TextWindow.WriteLine("PP Max: " + items[41])
+  TextWindow.WriteLine("PP Up: " + items[42])
+  TextWindow.WriteLine("Protein: " + items[43])
+  TextWindow.WriteLine("Rare Candy: " + items[44])
+  TextWindow.WriteLine("Red Flute: " + items[45])
+  TextWindow.WriteLine("Red Shard: " + items[46])
+  TextWindow.WriteLine("Repel: " + items[47])
+  TextWindow.WriteLine("Revival Herb: " + items[48])
+  TextWindow.WriteLine("Revive: " + items[49])
+  TextWindow.WriteLine("Shoal Salt: " + items[50])
+  TextWindow.WriteLine("Shoal Shell: " + items[51])
+  TextWindow.WriteLine("Soda Pop: " + items[52])
+  TextWindow.WriteLine("Star Piece: " + items[53])
+  TextWindow.WriteLine("Star Dust: " + items[54])
+  TextWindow.WriteLine("Sun Stone: " + items[55])
+  TextWindow.WriteLine("Super Potion: " + items[56])
+  TextWindow.WriteLine("Super Repel: " + items[57])
+  TextWindow.WriteLine("ThunderStone: " + items[58])
+  TextWindow.WriteLine("Tinymushroom: " + items[59])
+  TextWindow.WriteLine("Water Stone: " + items[60])
+  TextWindow.WriteLine("White Flute: " + items[61])
+  TextWindow.WriteLine("X Accuracy: " + items[62])
+  TextWindow.WriteLine("X Attack: " + items[63])
+  TextWindow.WriteLine("X Defend: " + items[64])
+  TextWindow.WriteLine("X Special: " + items[65])
+  TextWindow.WriteLine("X Speed: " + items[66])
+  TextWindow.WriteLine("Yellow Flute: " + items[67])
+  TextWindow.WriteLine("Yellow Shard: " + items[68])
+  TextWindow.WriteLine("Zinc: " + items[69])
+EndSub
